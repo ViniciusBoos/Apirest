@@ -38,9 +38,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(modelMapper.map(userDto, User.class));
     }
 
+    private void findByEmail(UserDto userDto) {
+        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+        if(user.isPresent() && !user.get().getId().equals(userDto.getId())) throw new DataIntegrityViolationException("User com email " + userDto.getEmail() + " ja registrado");
+    }
+
     @Override
-    public void findByEmail(UserDto userDto) {
-        Optional<User> byEmail = userRepository.findByEmail(userDto.getEmail());
-        if(byEmail.isPresent()) throw new DataIntegrityViolationException("User com email " + userDto.getEmail() + " ja registrado");
+    public User update(UserDto userDto) {
+        findByEmail(userDto);
+        return userRepository.save(modelMapper.map(userDto, User.class));
+    }
+
+
+    @Override
+    public void delete(Integer id) {
+        userRepository.delete(findById(id));
     }
 }
