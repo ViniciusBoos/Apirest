@@ -1,5 +1,7 @@
 package com.github.viniciusboos.apirest.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 
 public class UserDto {
@@ -10,6 +12,7 @@ public class UserDto {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
     public UserDto() {
