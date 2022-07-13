@@ -2,6 +2,7 @@ package com.github.viniciusboos.apirest.services.impl;
 
 import com.github.viniciusboos.apirest.domain.User;
 import com.github.viniciusboos.apirest.domain.dto.UserDto;
+import com.github.viniciusboos.apirest.exceptions.DataIntegrityViolationException;
 import com.github.viniciusboos.apirest.exceptions.ObjectNotFoundException;
 import com.github.viniciusboos.apirest.repositories.UserRepository;
 import com.github.viniciusboos.apirest.services.UserService;
@@ -33,6 +34,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserDto userDto) {
+        findByEmail(userDto);
         return userRepository.save(modelMapper.map(userDto, User.class));
+    }
+
+    @Override
+    public void findByEmail(UserDto userDto) {
+        Optional<User> byEmail = userRepository.findByEmail(userDto.getEmail());
+        if(byEmail.isPresent()) throw new DataIntegrityViolationException("User com email " + userDto.getEmail() + " ja registrado");
     }
 }

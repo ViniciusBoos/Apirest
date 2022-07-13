@@ -13,4 +13,6 @@ public interface UserService {
     List<User> findAll();
 
     User create(UserDto userDto);
+
+    void findByEmail(UserDto userDto);
 }
