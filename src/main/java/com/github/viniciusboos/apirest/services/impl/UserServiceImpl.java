@@ -1,6 +1,7 @@
 package com.github.viniciusboos.apirest.services.impl;
 
 import com.github.viniciusboos.apirest.domain.User;
+import com.github.viniciusboos.apirest.exceptions.ObjectNotFoundException;
 import com.github.viniciusboos.apirest.repositories.UserRepository;
 import com.github.viniciusboos.apirest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Usuário de id " + id + " não existe"));
+        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário de id " + id + " não existe"));
     }
 }
