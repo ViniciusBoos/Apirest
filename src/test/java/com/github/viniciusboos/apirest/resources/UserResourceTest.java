@@ -58,13 +58,13 @@ class UserResourceTest {
 
         assertNotNull(response);
         assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(UserDto.class, response.getBody().getClass());
 
         assertEquals(ID, response.getBody().getId());
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
-        assertEquals(PASSWORD, response.getBody().getPassword());
     }
 
     @Test
@@ -84,7 +84,6 @@ class UserResourceTest {
         assertEquals(ID, response.getBody().get(INDEX).getId());
         assertEquals(NAME, response.getBody().get(INDEX).getName());
         assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
-        assertEquals(PASSWORD, response.getBody().get(INDEX).getPassword());
     }
 
     @Test
@@ -100,11 +99,34 @@ class UserResourceTest {
     }
 
     @Test
-    void updateUser() {
+    void quandoChamarupdateUserDeveRetornarSucesso() {
+        Mockito.when(userService.update(Mockito.any())).thenReturn(user);
+        Mockito.when(modelMapper.map(Mockito.any(), Mockito.any())).thenReturn(userDto);
+
+        ResponseEntity<UserDto> response = userResource.updateUser(ID, userDto);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDto.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(EMAIL, response.getBody().getEmail());
     }
 
     @Test
     void delete() {
+        Mockito.doNothing().when(userService).delete(ID);
+
+        ResponseEntity<UserDto> response = userResource.delete(ID);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+
+        Mockito.verify(userService, Mockito.times(1)).delete(Mockito.anyInt());
     }
 
     private void startUser() {
