@@ -11,11 +11,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/user")
 public class UserResource {
+
 
     public static final String ID = "/{id}";
     @Autowired
@@ -54,4 +56,6 @@ public class UserResource {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
