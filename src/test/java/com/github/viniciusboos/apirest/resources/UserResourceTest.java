@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ class UserResourceTest {
 
         assertNotNull(response);
         assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(ArrayList.class, response.getBody().getClass());
         assertEquals(UserDto.class, response.getBody().get(INDEX).getClass());
@@ -86,7 +88,15 @@ class UserResourceTest {
     }
 
     @Test
-    void createUser() {
+    void quandoChamarcreateUserDeveRetorarCreated() {
+        Mockito.when(userService.create(Mockito.any())).thenReturn(user);
+
+        ResponseEntity<UserDto> response = userResource.createUser(userDto);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertNotNull(response.getHeaders().get("Location"));
     }
 
     @Test
